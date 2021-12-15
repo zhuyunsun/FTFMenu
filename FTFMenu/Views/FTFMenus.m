@@ -26,6 +26,11 @@
     
     FTFMenusType currentStyle;
     FTFMenusStation currentStation;
+    
+    CGFloat trigonMinX;//当三角形在上下时,三角形视图的自定义x坐标系,不设置就是默认值
+    CGFloat isChangeX;//判断是否进行设置了自定义x坐标;默认NO
+    CGFloat trigonMinY;//当三角形在左右时,三角形视图的自定义y坐标系,不设置就是默认值
+    CGFloat isChangeY;//判断是否进行设置了自定义y坐标;默认NO
 }
 @end
 @implementation FTFMenus
@@ -55,11 +60,17 @@
         self.backgroundColor = [UIColor clearColor];
         trigonHeight = 12;//三角形的高度
         
+        isChangeX = NO;
+        trigonMinX = trigonHeight;
+        
+        
         //默认 UP views
         currentStyle = FTFMenusWord;
         currentStation = FTFMenusStationUPLeft;
         
         [self reloadLineView];
+        
+        _trigonDefaultHeight = trigonHeight;
         
     }
     return self;
@@ -94,6 +105,15 @@
         if (currentStation == FTFMenusStationUPRight){
             r1 = CGRectMake(width  - trigonHeight *2, 0, trigonHeight, trigonHeight);
         }
+        
+        if (isChangeX == YES) {
+            //修改确定的r1x坐标
+            CGRect changeR1 = r1;
+            changeR1.origin.x = trigonMinX;
+            r1 = changeR1;
+        }
+        
+        
     }
     //左边
     if (currentStation == FTFMenusStationLeftUP || currentStation == FTFMenusStationLeftMiddle || currentStation == FTFMenusStationLeftDown) {
@@ -136,7 +156,12 @@
         if (currentStation == FTFMenusStationDownRight){
             r1 = CGRectMake(width  - trigonHeight *2,height - trigonHeight, trigonHeight, trigonHeight);
         }
-
+        if (isChangeX == YES) {
+            //修改确定的r1x坐标
+            CGRect changeR1 = r1;
+            changeR1.origin.x = trigonMinX;
+            r1 = changeR1;
+        }
     }
     //右边
     if (currentStation == FTFMenusStationRightUP || currentStation == FTFMenusStationRightMiddle || currentStation == FTFMenusStationRightDown) {
@@ -212,7 +237,7 @@
     return cell;
 }
 
-//
+// set方法
 - (void)setTitleSource:(NSArray *)titleSource{
     arrData = [titleSource copy];
     if (arrData.count > 0) {
@@ -252,7 +277,38 @@
     
     [self reloadLineView];
     
+}
+- (void)setCurrentMinx:(CGFloat)currentMinx{
+    //需要顺序调用?先保存所有设置,再调用方法统一生效;
+    if ([self isUPView] == YES || [self isDownView] == YES) {
+        NSLog(@"FTF__是上边或者下边,设置x坐标生效");
+        if (0.0 <= currentMinx && currentMinx <= (width - trigonHeight)) {
+            //判断是否越界,不越界刷新界面
+            trigonMinX = currentMinx;
+            isChangeX = YES;
+            [self reloadLineView];
+        }
+    }else{
+        NSLog(@"FTF__设置x坐标不生效");
+    }
+}
+-(void)updateAllProperty{
+    //生效所有设置
     
+    
+}
+//
+-(BOOL)isUPView{
+    if (currentStation == FTFMenusStationUPLeft || currentStation == FTFMenusStationUPMiddle || currentStation == FTFMenusStationUPRight) {
+        return YES;
+    }
+    return NO;
+}
+-(BOOL)isDownView{
+    if (currentStation == FTFMenusStationDownLeft || currentStation == FTFMenusStationDownMiddle || currentStation == FTFMenusStationDownRight) {
+        return YES;
+    }
+    return NO;
 }
 @end
 

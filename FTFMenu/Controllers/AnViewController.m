@@ -19,6 +19,7 @@
     
     
     FTFMenus *menu;
+    CGFloat menuWidth;
 }
 
 @end
@@ -107,8 +108,8 @@
     menu = nil;
     
     
-    
-    CGRect r1 = CGRectMake(upWidth *0.3,CGRectGetMaxY(upLine.frame) + 2, upWidth *0.4, leftHeight * 0.9);
+    menuWidth = upWidth *0.4;
+    CGRect r1 = CGRectMake(upWidth *0.3,CGRectGetMaxY(upLine.frame) + 2,menuWidth, leftHeight * 0.9);
     menu = [[FTFMenus alloc]initWithFrame:r1];
     menu.titleSource = @[@"测试中标题1",@"测试中标题2",@"测试中标题3",@"测试中标题4",@"测试中标题5"];
 //    menu.menuStyle = FTFMenusImage;
@@ -121,12 +122,15 @@
         } completion:^(BOOL finished) {
             
         }];
+    
+    NSLog(@"三角图标的默认宽高 = %f",menu.trigonDefaultHeight);
     //
     if (tag == 0) {
         
     }
     if (tag == 1) {
         menu.menuStation =  FTFMenusStationUPMiddle;
+        menu.currentMinx = menuWidth;
     }
     if (tag == 2) {
         menu.menuStation =  FTFMenusStationUPRight;
@@ -134,6 +138,7 @@
     //
     if (tag == 3) {
         menu.menuStation = FTFMenusStationLeftUP;
+        menu.currentMinx = menuWidth - menu.trigonDefaultHeight - 4;
     }
     if (tag == 4) {
         menu.menuStation = FTFMenusStationLeftMiddle;
@@ -144,6 +149,7 @@
     //
     if (tag == 6) {
         menu.menuStation = FTFMenusStationDownLeft;
+        menu.currentMinx = menuWidth - menu.trigonDefaultHeight - 4;
     }
     if (tag == 7) {
         menu.menuStation = FTFMenusStationDownMiddle;
