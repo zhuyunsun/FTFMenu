@@ -27,13 +27,65 @@
     FTFMenusType currentStyle;
     FTFMenusStation currentStation;
     
-    CGFloat trigonMinX;//当三角形在上下时,三角形视图的自定义x坐标系,不设置就是默认值
-    CGFloat isChangeX;//判断是否进行设置了自定义x坐标;默认NO
-    CGFloat trigonMinY;//当三角形在左右时,三角形视图的自定义y坐标系,不设置就是默认值
-    CGFloat isChangeY;//判断是否进行设置了自定义y坐标;默认NO
+    
+    //还是要给判断是否设置了x或者y的属性,再进行范围判断.
+    CGFloat trigonFTFMinX;//当三角形在上下时,三角形视图的自定义x坐标系,不设置就是默认值
+    CGFloat trigonFTFMinY;//当三角形在左右时,三角形视图的自定义y坐标系,不设置就是默认值
+    BOOL hadChangeX;
+    BOOL hadChangeY;
+    
+    
+    BOOL hadAdd;//当前视图是否被add,判断是否需要重新加载界面.
 }
 @end
 @implementation FTFMenus
+- (void)drawRect:(CGRect)rect{
+    NSLog(@"在add时drawRect,把该类init和frame属性方法禁用");
+    //add在设置属性之后
+    //Q:多次设置属性多次刷新,能不能多次设置一次刷新?
+    //A:多个条件同时判断.
+    
+    /*
+     会被修改的参数:
+     tableView中cell的样式
+     三角形的位置十二种枚举
+     三角形的x坐标
+     三角形的y坐标
+     cell的高度
+     tableView的数据源,文字数组和图片数组
+     
+     
+     */
+    //属性设置在add之后
+    
+    hadAdd = YES;
+    
+    //跟默认界面不同则会刷新界面
+    if (currentStyle == FTFMenusImage || currentStation != FTFMenusStationUPLeft
+        || [self judgeMinX] || [self judgeMinY]) {
+        
+        [self reloadLineView];
+    }
+
+
+}
+#pragma mark 判断刷新界面生效逻辑
+-(BOOL)judgeMinX{
+    if ([self isUPView] == YES || [self isDownView] == YES) {
+        NSLog(@"FTF__是上边或者下边");
+        return YES;
+    }
+    NSLog(@"FTF__设置x坐标不生效");
+    return NO;
+}
+-(BOOL)judgeMinY{
+    if ([self isUPView] == NO && [self isDownView] == NO) {
+        NSLog(@"FTF__不是上边和下边");
+        return YES;
+    }
+    return NO;
+}
+#pragma mark initWithFrame
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
@@ -59,23 +111,32 @@
         
         self.backgroundColor = [UIColor clearColor];
         trigonHeight = 12;//三角形的高度
+        _trigonDefaultHeight = trigonHeight;
         
-        isChangeX = NO;
-        trigonMinX = trigonHeight;
-        
-        
-        //默认 UP views
+        //默认 界面属性
         currentStyle = FTFMenusWord;
         currentStation = FTFMenusStationUPLeft;
+        hadAdd = NO;
+        hadChangeX = NO;
+        hadChangeY = YES;
+        //这2个参数不够?
+        trigonFTFMinX = trigonHeight;
+        trigonFTFMinY = 0;
         
         [self reloadLineView];
         
-        _trigonDefaultHeight = trigonHeight;
+        
         
     }
     return self;
 }
-//重新对myTableView和三角形视图进行布局
+/*
+ 重新对myTableView和三角形视图进行布局
+ 
+ 
+ 
+ 进行判断主要是为了减少非必要的界面重新加载次数.
+ */
 -(void)reloadLineView{
     //4个方向
     CGFloat mainWidth = 0;
@@ -105,15 +166,15 @@
         if (currentStation == FTFMenusStationUPRight){
             r1 = CGRectMake(width  - trigonHeight *2, 0, trigonHeight, trigonHeight);
         }
-        
-        if (isChangeX == YES) {
-            //修改确定的r1x坐标
-            CGRect changeR1 = r1;
-            changeR1.origin.x = trigonMinX;
-            r1 = changeR1;
+        if (hadChangeX == YES) {
+            if (0.0 <= trigonFTFMinX && trigonFTFMinX <= (width - trigonHeight)) {
+                //判断是否越界,不越界刷新界面
+                //修改确定的r1x坐标
+                CGRect changeR1 = r1;
+                changeR1.origin.x = trigonFTFMinX;
+                r1 = changeR1;
+            }
         }
-        
-        
     }
     //左边
     if (currentStation == FTFMenusStationLeftUP || currentStation == FTFMenusStationLeftMiddle || currentStation == FTFMenusStationLeftDown) {
@@ -135,7 +196,15 @@
         if (currentStation == FTFMenusStationLeftDown){
             r1 = CGRectMake(0, height - trigonHeight *2, trigonHeight, trigonHeight);
         }
-
+        if (hadChangeY == YES) {
+            if (0.0 <= trigonFTFMinY && trigonFTFMinY <= (height - trigonHeight)) {
+                //判断是否越界,不越界刷新界面
+                //修改确定的r1y坐标
+                CGRect changeR1 = r1;
+                changeR1.origin.y = trigonFTFMinY;
+                r1 = changeR1;
+            }
+        }
     }
     //下边
     if (currentStation == FTFMenusStationDownLeft || currentStation == FTFMenusStationDownMiddle || currentStation == FTFMenusStationDownRight) {
@@ -156,11 +225,14 @@
         if (currentStation == FTFMenusStationDownRight){
             r1 = CGRectMake(width  - trigonHeight *2,height - trigonHeight, trigonHeight, trigonHeight);
         }
-        if (isChangeX == YES) {
-            //修改确定的r1x坐标
-            CGRect changeR1 = r1;
-            changeR1.origin.x = trigonMinX;
-            r1 = changeR1;
+        if (hadChangeX == YES) {
+            if (0.0 <= trigonFTFMinX && trigonFTFMinX <= (width - trigonHeight)) {
+                //判断是否越界,不越界刷新界面
+                //修改确定的r1x坐标
+                CGRect changeR1 = r1;
+                changeR1.origin.x = trigonFTFMinX;
+                r1 = changeR1;
+            }
         }
     }
     //右边
@@ -184,6 +256,15 @@
             r1 = CGRectMake(width - trigonHeight, height - trigonHeight *2, trigonHeight, trigonHeight);
         }
 
+        if (hadChangeY == YES) {
+            if (0.0 <= trigonFTFMinY && trigonFTFMinY <= (height - trigonHeight)) {
+                //判断是否越界,不越界刷新界面
+                //修改确定的r1y坐标
+                CGRect changeR1 = r1;
+                changeR1.origin.y = trigonFTFMinY;
+                r1 = changeR1;
+            }
+        }
 
     }
 
@@ -206,6 +287,10 @@
     [self addSubview:m1];
 
 
+    //数据复原
+    hadChangeX = NO;
+    hadChangeY = NO;
+
 }
 
 #pragma mark delegate
@@ -213,6 +298,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSLog(@"点击的row = %ld",indexPath.row);
+    
+    if ([self.delegate respondsToSelector:@selector(selectFTFIndex:)]) {
+        [self.delegate selectFTFIndex:indexPath.row];
+    }else{
+        NSLog(@"FTF__没有实现selectFTFIndex协议方法");
+    }
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return arrData.count;
@@ -234,6 +325,10 @@
             cell.logoImageView.image = [UIImage imageNamed:arrImage[indexPath.row]];
         }
     }
+    
+    
+    
+    
     return cell;
 }
 
@@ -255,8 +350,8 @@
 - (void)setMenuStyle:(FTFMenusType)menuStyle{
     //设置了图片样式,移除init中创建的tableView,重新创建,把类型传进FTFMenusCell
     //重新加载tableView,也重新加载三角形视图,写在一起了.
-    if (menuStyle == FTFMenusImage) {
-        currentStyle = menuStyle;
+    currentStyle = menuStyle;
+    if (hadAdd == YES) {
         [self reloadLineView];
     }
 }
@@ -272,30 +367,28 @@
          
          在搞一种自定义位置的
          */
-    
     currentStation = menuStation;
-    
-    [self reloadLineView];
-    
+    if (hadAdd == YES) {
+        [self reloadLineView];
+    }
 }
 - (void)setCurrentMinx:(CGFloat)currentMinx{
     //需要顺序调用?先保存所有设置,再调用方法统一生效;
-    if ([self isUPView] == YES || [self isDownView] == YES) {
-        NSLog(@"FTF__是上边或者下边,设置x坐标生效");
-        if (0.0 <= currentMinx && currentMinx <= (width - trigonHeight)) {
-            //判断是否越界,不越界刷新界面
-            trigonMinX = currentMinx;
-            isChangeX = YES;
-            [self reloadLineView];
-        }
-    }else{
-        NSLog(@"FTF__设置x坐标不生效");
+    NSLog(@"FTF__trigonFTFMinX = %f",currentMinx);
+    trigonFTFMinX = currentMinx;
+    hadChangeX = YES;
+    if (hadAdd == YES) {
+        [self reloadLineView];
     }
 }
--(void)updateAllProperty{
-    //生效所有设置
-    
-    
+- (void)setCurrentMinY:(CGFloat)currentMinY{
+    NSLog(@"FTF__trigonFTFMinY = %f",currentMinY);
+    trigonFTFMinY = currentMinY;
+    hadChangeY = YES;
+    if (hadAdd == YES) {
+        [self reloadLineView];
+    }
+
 }
 //
 -(BOOL)isUPView{

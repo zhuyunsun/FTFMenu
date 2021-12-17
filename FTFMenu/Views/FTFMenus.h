@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
     FTFMenusImage,//文字 + 图片
 };
 
+@protocol FTFMenusDelegate;
 ///FTFMenus
 @interface FTFMenus : UIView
 
@@ -67,10 +68,23 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
 ///获取三角形视图的宽度和高度,高度=宽度;
 @property(nonatomic,readonly,assign)CGFloat trigonDefaultHeight;
 
+///
+@property(nonatomic,weak)id <FTFMenusDelegate>delegate;
+
 //是否可以滑动
 
-///生效上面的属性设置,每一次设置属性之后,都要调用该方法才会生效;
--(void)updateAllProperty;
+///加载动画效果
+
+///移除动画效果
+
+@end
+
+@protocol FTFMenusDelegate <NSObject>
+
+@optional
+/// 选中的标题下标,从0开始
+/// @param index 下标
+-(void)selectFTFIndex:(NSUInteger)index;
 @end
 
 //====================================================================================

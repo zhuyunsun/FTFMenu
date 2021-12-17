@@ -7,7 +7,7 @@
 
 #import "AnViewController.h"
 #import "FTFMenus.h"
-@interface AnViewController (){
+@interface AnViewController ()<FTFMenusDelegate>{
     UIView *upLine;
     UIView *leftLine;
     UIView *downLine;
@@ -20,6 +20,7 @@
     
     FTFMenus *menu;
     CGFloat menuWidth;
+    CGFloat menuHeight;
 }
 
 @end
@@ -109,36 +110,33 @@
     
     
     menuWidth = upWidth *0.4;
-    CGRect r1 = CGRectMake(upWidth *0.3,CGRectGetMaxY(upLine.frame) + 2,menuWidth, leftHeight * 0.9);
+    menuHeight = leftHeight * 0.9;
+    CGRect r1 = CGRectMake(upWidth *0.3,CGRectGetMaxY(upLine.frame) + 2,menuWidth, menuHeight);
     menu = [[FTFMenus alloc]initWithFrame:r1];
     menu.titleSource = @[@"测试中标题1",@"测试中标题2",@"测试中标题3",@"测试中标题4",@"测试中标题5"];
-//    menu.menuStyle = FTFMenusImage;
+    menu.menuStyle = FTFMenusImage;
     menu.imageData = @[@"A1",@"A1",@"A1",@"A1",@"A1"];
     menu.alpha = 0.01;
-    [self.view addSubview:menu];
-    
-    [UIView animateWithDuration:0.33 animations:^{
-        menu.alpha = 1;
-        } completion:^(BOOL finished) {
-            
-        }];
-    
+    menu.delegate = self;
     NSLog(@"三角图标的默认宽高 = %f",menu.trigonDefaultHeight);
     //
     if (tag == 0) {
-        
+        //上-左
     }
     if (tag == 1) {
+        //上-中
         menu.menuStation =  FTFMenusStationUPMiddle;
         menu.currentMinx = menuWidth;
     }
     if (tag == 2) {
+        //上-右
         menu.menuStation =  FTFMenusStationUPRight;
     }
     //
     if (tag == 3) {
+        //左-上
         menu.menuStation = FTFMenusStationLeftUP;
-        menu.currentMinx = menuWidth - menu.trigonDefaultHeight - 4;
+        menu.currentMinY = menuHeight *0.5;
     }
     if (tag == 4) {
         menu.menuStation = FTFMenusStationLeftMiddle;
@@ -146,6 +144,17 @@
     if (tag == 5) {
         menu.menuStation = FTFMenusStationLeftDown;
     }
+    
+    //所有属性设置都在add之前
+    [self.view addSubview:menu];
+    
+    [UIView animateWithDuration:0.33 animations:^{
+        menu.alpha = 1;
+        } completion:^(BOOL finished) {
+            
+        }];
+
+
     //
     if (tag == 6) {
         menu.menuStation = FTFMenusStationDownLeft;
@@ -156,6 +165,7 @@
     }
     if (tag == 8) {
         menu.menuStation = FTFMenusStationDownRight;
+        menu.currentMinx = menuWidth *0.5;
     }
     //
     if (tag == 9) {
@@ -167,8 +177,12 @@
     if (tag == 11) {
         menu.menuStation = FTFMenusStationRightDown;
     }
-//    menu.currentRowHeight = leftHeight * 0.7 *0.4;
+    menu.currentRowHeight = menuHeight *0.4;
     
+}
+
+- (void)selectFTFIndex:(NSUInteger)index{
+    NSLog(@"返回的Index下标 = %ld",index);
 }
 -(void)addLines{
     minX = WINDOWWIDTH() *0.15;
