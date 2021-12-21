@@ -36,10 +36,15 @@
     
     
     BOOL hadAdd;//当前视图是否被add,判断是否需要重新加载界面.
+    
+    BOOL cellSlide;
+    BOOL currentAnimate;
 }
 @end
 @implementation FTFMenus
 - (void)drawRect:(CGRect)rect{
+    NSLog(@"FTF__%s", __PRETTY_FUNCTION__);
+    //pretty function
     NSLog(@"在add时drawRect,把该类init和frame属性方法禁用");
     //add在设置属性之后
     //Q:多次设置属性多次刷新,能不能多次设置一次刷新?
@@ -119,6 +124,8 @@
         hadAdd = NO;
         hadChangeX = NO;
         hadChangeY = YES;
+        cellSlide = YES;
+        currentAnimate = YES;
         //这2个参数不够?
         trigonFTFMinX = trigonHeight;
         trigonFTFMinY = 0;
@@ -138,6 +145,7 @@
  进行判断主要是为了减少非必要的界面重新加载次数.
  */
 -(void)reloadLineView{
+    NSLog(@"FTF__刷新界面布局");
     //4个方向
     CGFloat mainWidth = 0;
     CGFloat mainHeight = 0;
@@ -150,7 +158,7 @@
         mainWidth = width;
         mainHeight = height - trigonHeight;
 
-        rowHeight = mainHeight *0.23;
+        rowHeight = mainHeight *0.25;
         rowWidth = mainWidth;
         r0 = CGRectMake(0, trigonHeight, mainWidth, mainHeight);
         
@@ -181,7 +189,7 @@
         mainWidth = width - trigonHeight;
         mainHeight = height;
 
-        rowHeight = mainHeight *0.23;
+        rowHeight = mainHeight *0.25;
         rowWidth = mainWidth;
         r0 = CGRectMake(trigonHeight,0, mainWidth, mainHeight);
         
@@ -211,7 +219,7 @@
         mainWidth = width;
         mainHeight = height - trigonHeight;
 
-        rowHeight = mainHeight *0.23;
+        rowHeight = mainHeight *0.25;
         rowWidth = mainWidth;
         r0 = CGRectMake(0,0, mainWidth, mainHeight);
 
@@ -240,7 +248,7 @@
         mainWidth = width - trigonHeight;
         mainHeight = height;
 
-        rowHeight = mainHeight *0.23;
+        rowHeight = mainHeight *0.25;
         rowWidth = mainWidth;
         r0 = CGRectMake(0,0, mainWidth, mainHeight);
         
@@ -278,15 +286,35 @@
     myTableView.showsVerticalScrollIndicator = NO;
     myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     myTableView.layer.cornerRadius = 3;
+    myTableView.alpha = 0.01;
     [self addSubview:myTableView];
     
     [m1 removeFromSuperview];
     m1 = nil;
     m1 = [[FTFMiddleView alloc]initWithFrame:r1];
     m1.state = state;
+    m1.alpha = 0.01;
     [self addSubview:m1];
 
+    //
+    myTableView.scrollEnabled = YES;
+    if (cellSlide == NO) {
+        myTableView.scrollEnabled = NO;
+    }
 
+    //
+    if (currentAnimate == YES) {
+        [UIView animateWithDuration:0.33 animations:^{
+            m1.alpha = 1;
+            myTableView.alpha = 1;
+        }];
+    }else{
+        m1.alpha = 1;
+        myTableView.alpha = 1;
+    }
+    
+    
+    
     //数据复原
     hadChangeX = NO;
     hadChangeY = NO;
@@ -359,6 +387,7 @@
     rowHeight = currentRowHeight;
     //刷新行不行?
     [myTableView reloadData];
+//    [self reloadLineView];
 }
 - (void)setMenuStation:(FTFMenusStation)menuStation{
         /*
@@ -390,6 +419,28 @@
     }
 
 }
+- (void)setCanSlide:(BOOL)canSlide{
+    NSLog(@"FTF__canSlide = %d",canSlide);
+    cellSlide = YES;
+    if (canSlide == NO) {
+        cellSlide = NO;
+    }
+}
+- (void)setShowAnimate:(BOOL)showAnimate{
+    currentAnimate = YES;
+    if (showAnimate == NO) {
+        currentAnimate = NO;
+    }
+}
+
+-(void)hideRemoveView:(FTFMenus *)view{
+    [UIView animateWithDuration:0.28 animations:^{
+            view.alpha = 0.01;
+        } completion:^(BOOL finished) {
+            [view removeFromSuperview];
+        }];
+}
+
 //
 -(BOOL)isUPView{
     if (currentStation == FTFMenusStationUPLeft || currentStation == FTFMenusStationUPMiddle || currentStation == FTFMenusStationUPRight) {

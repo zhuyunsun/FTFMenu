@@ -122,6 +122,7 @@
     //
     if (tag == 0) {
         //上-左
+        menu.canSlide = NO;
     }
     if (tag == 1) {
         //上-中
@@ -146,10 +147,11 @@
     }
     
     //所有属性设置都在add之前
+    menu.alpha = 1;
     [self.view addSubview:menu];
     
     [UIView animateWithDuration:0.33 animations:^{
-        menu.alpha = 1;
+        
         } completion:^(BOOL finished) {
             
         }];
@@ -176,13 +178,20 @@
     }
     if (tag == 11) {
         menu.menuStation = FTFMenusStationRightDown;
+        menu.canSlide = NO;
+        menu.showAnimate = NO;
+//        menu.currentRowHeight = menuHeight *0.2;
     }
-    menu.currentRowHeight = menuHeight *0.4;
+//    menu.currentRowHeight = menuHeight *0.4;
     
 }
 
 - (void)selectFTFIndex:(NSUInteger)index{
     NSLog(@"返回的Index下标 = %ld",index);
+}
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    NSLog(@"FTF__%s", __PRETTY_FUNCTION__);
+    [menu hideRemoveView:menu];
 }
 -(void)addLines{
     minX = WINDOWWIDTH() *0.15;

@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
 ///标题样式,默认文字
 @property(nonatomic,assign)FTFMenusType menuStyle;
 
-///cell的高度,不设置默认是当前视图高度的0.23
+///cell的高度,不设置默认是当前UITableView视图高度的0.25
 @property(nonatomic,assign)CGFloat currentRowHeight;
 
 ///标题数组
@@ -68,14 +68,17 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
 ///获取三角形视图的宽度和高度,高度=宽度;
 @property(nonatomic,readonly,assign)CGFloat trigonDefaultHeight;
 
-///
+///协议
 @property(nonatomic,weak)id <FTFMenusDelegate>delegate;
 
-//是否可以滑动
+///是否可以滑动,默认yes
+@property(nonatomic,assign,getter=isSlide)BOOL canSlide;
 
-///加载动画效果
+///加载动画效果,默认yes
+@property(nonatomic,assign,getter=isShowAnimate)BOOL showAnimate;
 
-///移除动画效果
+///移除当前界面(带有动画效果)
+-(void)hideRemoveView:(FTFMenus *)view;
 
 @end
 
