@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE31CDBC2771B4D100653D45 /* 上左.png in Resources */ = {isa = PBXBuildFile; fileRef = FE31CDBB2771B4D100653D45 /* 上左.png */; };
 		FEF239F127571BF6009065B0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF239F027571BF6009065B0 /* AppDelegate.m */; };
 		FEF239F727571BF6009065B0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF239F627571BF6009065B0 /* ViewController.m */; };
 		FEF239FA27571BF6009065B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FEF239F827571BF6009065B0 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE31CDBB2771B4D100653D45 /* 上左.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "上左.png"; sourceTree = "<group>"; };
 		FEF239EC27571BF6009065B0 /* FTFMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FTFMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF239EF27571BF6009065B0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FEF239F027571BF6009065B0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -48,6 +50,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FE31CDBA2771B4D100653D45 /* FFImages */ = {
+			isa = PBXGroup;
+			children = (
+				FE31CDBB2771B4D100653D45 /* 上左.png */,
+			);
+			path = FFImages;
+			sourceTree = "<group>";
+		};
 		FEF239E327571BF6009065B0 = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +77,7 @@
 		FEF239EE27571BF6009065B0 /* FTFMenu */ = {
 			isa = PBXGroup;
 			children = (
+				FE31CDBA2771B4D100653D45 /* FFImages */,
 				FEF23A0927572436009065B0 /* Views */,
 				FEF23A0827572410009065B0 /* Controllers */,
 				FEF239EF27571BF6009065B0 /* AppDelegate.h */,
@@ -159,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEF239FF27571BF9009065B0 /* LaunchScreen.storyboard in Resources */,
+				FE31CDBC2771B4D100653D45 /* 上左.png in Resources */,
 				FEF239FC27571BF9009065B0 /* Assets.xcassets in Resources */,
 				FEF239FA27571BF6009065B0 /* Main.storyboard in Resources */,
 			);
