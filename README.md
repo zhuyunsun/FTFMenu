@@ -3,7 +3,7 @@
 
 ## 效果图
 
-
+![左上](https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png)
 
 ## 代码示例  
 
