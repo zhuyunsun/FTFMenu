@@ -17,12 +17,15 @@
     CGFloat upWidth;
     CGFloat leftHeight;
     
-    
+    UIView *middleView;
     FTFMenus *menu;
     CGFloat menuWidth;
     CGFloat menuHeight;
     
     NSArray *titleArr;
+    
+    NSUInteger selecetBtn;
+    
 }
 
 @end
@@ -61,7 +64,7 @@
     CGFloat middleWidth = lessWidth - middleLess *2;
     CGFloat middleHeight = lessHeight - middleLess *2;
     
-    UIView *middleView = [[UIView alloc]init];
+    middleView = [[UIView alloc]init];
     middleView.frame = CGRectMake(0, 0,middleWidth, middleHeight);
     middleView.center = CGPointMake(lessWidth / 2, lessHeight / 2);
     middleView.backgroundColor = [UIColor clearColor];
@@ -73,13 +76,17 @@
     CGFloat btnHeight = middleHeight *0.1;
     CGFloat btnMiddleHeight = middleHeight *0.04;
     
+    selecetBtn = 50;
+    
     NSUInteger tag = 100000;
     NSUInteger index = 0;
     titleArr = @[@"上-左",@"上-中",@"上-右",
-                          @"左-上",@"左-中",@"左-下",
-                          @"下-左",@"下-中",@"下-右",
-                          @"右-上",@"右-中",@"右-下"];
-    for (NSUInteger i = 0; i < 4; i ++) {
+                 @"左-上",@"左-中",@"左-下",
+                 @"下-左",@"下-中",@"下-右",
+                 @"右-上",@"右-中",@"右-下",
+                 @"自定义x坐标",@"自定义y坐标",@"加载没有动画效果",
+                 @"标题不可滑动",@"不带图片的标题",@"自定义标题栏高度"];
+    for (NSUInteger i = 0; i < 6; i ++) {
         
         for (NSUInteger j = 0; j < 3; j ++) {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -87,6 +94,7 @@
             btn.backgroundColor = [UIColor blackColor];
             btn.tag = tag;
             btn.layer.cornerRadius = 5;
+            btn.titleLabel.adjustsFontSizeToFitWidth = YES;
             [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchDown];
             [middleView addSubview:btn];
@@ -106,6 +114,32 @@
 -(void)btnAction:(UIButton *)btn{
     NSLog(@"点击的tag = %ld",btn.tag);
     NSUInteger tag = btn.tag - 100000;
+    if (selecetBtn == 50) {
+        btn.backgroundColor = [UIColor whiteColor];
+        btn.layer.borderColor = [[UIColor blackColor] CGColor];
+        btn.layer.borderWidth = 0.88;
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        selecetBtn = btn.tag;
+    }else{
+        if (selecetBtn != btn.tag) {
+            //上一个点击的
+            [self normalState];
+            //当前点击的
+            btn.backgroundColor = [UIColor whiteColor];
+            btn.layer.borderColor = [[UIColor blackColor] CGColor];
+            btn.layer.borderWidth = 0.88;
+            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            
+            selecetBtn = btn.tag;
+        }else{
+            NSLog(@"点击了相同的按钮");
+            return;
+        }
+        
+    }
+    
+    
+    
     self.title = titleArr[tag];
     
     [menu removeFromSuperview];
@@ -186,15 +220,28 @@
 //        menu.currentRowHeight = menuHeight *0.2;
     }
 //    menu.currentRowHeight = menuHeight *0.4;
+    //
+    
     
 }
 
 - (void)selectFTFIndex:(NSUInteger)index{
     NSLog(@"返回的Index下标 = %ld",index);
+    [self normalState];
+    
+    
+    
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     NSLog(@"FTF__%s", __PRETTY_FUNCTION__);
     [menu hideRemoveView:menu];
+    [self normalState];
+}
+-(void)normalState{
+    UIButton *oldBtn = (UIButton *)[middleView viewWithTag:selecetBtn];
+    oldBtn.backgroundColor = [UIColor blackColor];
+    [oldBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
 }
 -(void)addLines{
     minX = WINDOWWIDTH() *0.15;

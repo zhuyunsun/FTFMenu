@@ -329,9 +329,11 @@
     
     if ([self.delegate respondsToSelector:@selector(selectFTFIndex:)]) {
         [self.delegate selectFTFIndex:indexPath.row];
+        [self hideRemoveView:self];
     }else{
         NSLog(@"FTF__没有实现selectFTFIndex协议方法");
     }
+
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return arrData.count;
