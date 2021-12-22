@@ -5,7 +5,7 @@
 
 <!--![左上](https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png)
 -->
-<img src= https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png width=25%>  <img src= https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png width=25%>
+<img src= https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png width=20%>  <img src= https://github.com/zhuyunsun/FTFMenu/blob/main/FTFMenu/FFImages/%E4%B8%8A%E5%B7%A6.png width=20%>
 
 
 

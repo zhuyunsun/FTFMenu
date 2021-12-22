@@ -21,6 +21,8 @@
     FTFMenus *menu;
     CGFloat menuWidth;
     CGFloat menuHeight;
+    
+    NSArray *titleArr;
 }
 
 @end
@@ -73,7 +75,7 @@
     
     NSUInteger tag = 100000;
     NSUInteger index = 0;
-    NSArray *titleArr = @[@"上-左",@"上-中",@"上-右",
+    titleArr = @[@"上-左",@"上-中",@"上-右",
                           @"左-上",@"左-中",@"左-下",
                           @"下-左",@"下-中",@"下-右",
                           @"右-上",@"右-中",@"右-下"];
@@ -104,6 +106,7 @@
 -(void)btnAction:(UIButton *)btn{
     NSLog(@"点击的tag = %ld",btn.tag);
     NSUInteger tag = btn.tag - 100000;
+    self.title = titleArr[tag];
     
     [menu removeFromSuperview];
     menu = nil;
