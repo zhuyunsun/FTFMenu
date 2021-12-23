@@ -159,12 +159,11 @@
     //
     if (tag == 0) {
         //上-左
-        menu.canSlide = NO;
+        
     }
     if (tag == 1) {
         //上-中
         menu.menuStation =  FTFMenusStationUPMiddle;
-        menu.currentMinx = menuWidth;
     }
     if (tag == 2) {
         //上-右
@@ -174,12 +173,13 @@
     if (tag == 3) {
         //左-上
         menu.menuStation = FTFMenusStationLeftUP;
-        menu.currentMinY = menuHeight *0.5;
     }
     if (tag == 4) {
+        //左-中
         menu.menuStation = FTFMenusStationLeftMiddle;
     }
     if (tag == 5) {
+        //左-下
         menu.menuStation = FTFMenusStationLeftDown;
     }
     
@@ -196,32 +196,65 @@
 
     //
     if (tag == 6) {
+        //下-左
         menu.menuStation = FTFMenusStationDownLeft;
-        menu.currentMinx = menuWidth - menu.trigonDefaultHeight - 4;
     }
     if (tag == 7) {
+        //下-中
         menu.menuStation = FTFMenusStationDownMiddle;
     }
     if (tag == 8) {
+        //下-右
         menu.menuStation = FTFMenusStationDownRight;
-        menu.currentMinx = menuWidth *0.5;
     }
     //
     if (tag == 9) {
+        //右-上
         menu.menuStation = FTFMenusStationRightUP;
     }
     if (tag == 10) {
+        //右-中
         menu.menuStation = FTFMenusStationRightMiddle;
     }
     if (tag == 11) {
+        //右-下
         menu.menuStation = FTFMenusStationRightDown;
-        menu.canSlide = NO;
-        menu.showAnimate = NO;
-//        menu.currentRowHeight = menuHeight *0.2;
+        
+        
     }
-//    menu.currentRowHeight = menuHeight *0.4;
+
     //
     
+    if (tag == 12) {
+        //自定义x坐标
+        menu.menuStation =  FTFMenusStationUPMiddle;
+        menu.currentMinx = menuWidth *0.2;
+    }
+    if (tag == 13) {
+        //自定义y坐标
+        menu.menuStation = FTFMenusStationRightDown;
+        menu.currentMinY = menuHeight *0.2;
+    }
+    
+    if (tag == 14) {
+        //加载没有动画效果
+        menu.showAnimate = NO;
+    }
+    
+    if (tag == 15) {
+        //标题不可滑动
+        menu.canSlide = NO;
+        menu.currentRowHeight = (menuHeight - menu.trigonDefaultHeight) / 5.0;
+        
+    }
+    if (tag == 16) {
+        //不带图片的标题
+        menu.menuStyle = FTFMenusWord;
+    }
+    if (tag == 17) {
+        //自定义cell的高度
+        menu.currentRowHeight = menuHeight *0.3;
+    }
     
 }
 
@@ -241,6 +274,8 @@
     UIButton *oldBtn = (UIButton *)[middleView viewWithTag:selecetBtn];
     oldBtn.backgroundColor = [UIColor blackColor];
     [oldBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+    selecetBtn = 50;
 
 }
 -(void)addLines{

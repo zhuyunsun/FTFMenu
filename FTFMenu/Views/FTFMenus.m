@@ -39,6 +39,7 @@
     
     BOOL cellSlide;
     BOOL currentAnimate;
+    BOOL changeRowHeight;
 }
 @end
 @implementation FTFMenus
@@ -126,6 +127,7 @@
         hadChangeY = YES;
         cellSlide = YES;
         currentAnimate = YES;
+        changeRowHeight = NO;
         //这2个参数不够?
         trigonFTFMinX = trigonHeight;
         trigonFTFMinY = 0;
@@ -158,8 +160,9 @@
         mainWidth = width;
         mainHeight = height - trigonHeight;
 
-        rowHeight = mainHeight *0.25;
-        rowWidth = mainWidth;
+        if (rowHeight != mainHeight *0.25) {
+            
+        }
         r0 = CGRectMake(0, trigonHeight, mainWidth, mainHeight);
         
         
@@ -189,8 +192,6 @@
         mainWidth = width - trigonHeight;
         mainHeight = height;
 
-        rowHeight = mainHeight *0.25;
-        rowWidth = mainWidth;
         r0 = CGRectMake(trigonHeight,0, mainWidth, mainHeight);
         
         
@@ -219,8 +220,6 @@
         mainWidth = width;
         mainHeight = height - trigonHeight;
 
-        rowHeight = mainHeight *0.25;
-        rowWidth = mainWidth;
         r0 = CGRectMake(0,0, mainWidth, mainHeight);
 
         state = FTFArrowStateDown;
@@ -248,8 +247,6 @@
         mainWidth = width - trigonHeight;
         mainHeight = height;
 
-        rowHeight = mainHeight *0.25;
-        rowWidth = mainWidth;
         r0 = CGRectMake(0,0, mainWidth, mainHeight);
         
         
@@ -276,6 +273,12 @@
 
     }
 
+    
+    rowWidth = mainWidth;
+    if (changeRowHeight != YES) {
+        rowHeight = mainHeight *0.25;
+    }
+    
     [myTableView removeFromSuperview];
     myTableView = nil;
     myTableView = [[UITableView alloc]init];
@@ -386,10 +389,19 @@
     }
 }
 - (void)setCurrentRowHeight:(CGFloat)currentRowHeight{
+    changeRowHeight = NO;
+    if (rowHeight != currentRowHeight) {
+        changeRowHeight = YES;
+    }
     rowHeight = currentRowHeight;
     //刷新行不行?
-    [myTableView reloadData];
+//    [myTableView reloadData];
 //    [self reloadLineView];
+    //rowHeight没有进行判断
+    if (hadAdd == YES) {
+        [self reloadLineView];
+    }
+
 }
 - (void)setMenuStation:(FTFMenusStation)menuStation{
         /*
@@ -422,17 +434,26 @@
 
 }
 - (void)setCanSlide:(BOOL)canSlide{
+    //不可滑动的时候,是否根据数组对cell高度进行平分?
     NSLog(@"FTF__canSlide = %d",canSlide);
     cellSlide = YES;
     if (canSlide == NO) {
         cellSlide = NO;
     }
+    if (hadAdd == YES) {
+        [self reloadLineView];
+    }
+
 }
 - (void)setShowAnimate:(BOOL)showAnimate{
     currentAnimate = YES;
     if (showAnimate == NO) {
         currentAnimate = NO;
     }
+    if (hadAdd == YES) {
+        [self reloadLineView];
+    }
+
 }
 
 -(void)hideRemoveView:(FTFMenus *)view{
