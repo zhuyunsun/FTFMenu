@@ -155,7 +155,7 @@
     menu.imageData = @[@"A1",@"A1",@"A1",@"A1",@"A1"];
     menu.alpha = 0.01;
     menu.delegate = self;
-    NSLog(@"三角图标的默认宽高 = %f",menu.trigonDefaultHeight);
+    NSLog(@"三角图标的默认宽高 = %f,版本 = %@",menu.trigonDefaultHeight,menu.FTFSDKVersion);
     //
     if (tag == 0) {
         //上-左

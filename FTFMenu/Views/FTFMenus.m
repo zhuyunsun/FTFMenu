@@ -135,6 +135,8 @@
         [self reloadLineView];
         
         
+#pragma mark 当前版本
+        _FTFSDKVersion = @"1.0.0";
         
     }
     return self;

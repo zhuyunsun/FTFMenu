@@ -44,6 +44,9 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
 ///FTFMenus
 @interface FTFMenus : UIView
 
+///版本
+@property(nonatomic,strong,readonly)NSString *FTFSDKVersion;
+
 ///三角形的位置,默认FTFMenusStationUPLeft
 @property(nonatomic,assign)FTFMenusStation menuStation;
 
