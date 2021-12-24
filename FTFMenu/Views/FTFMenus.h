@@ -83,6 +83,11 @@ typedef NS_ENUM(NSUInteger,FTFMenusType){
 ///移除当前界面(带有动画效果)
 -(void)hideRemoveView:(FTFMenus *)view;
 
+
+/// 禁止方法1
+-(instancetype)init NS_UNAVAILABLE;
+/// 禁止方法2
++(instancetype)new NS_UNAVAILABLE;
 @end
 
 @protocol FTFMenusDelegate <NSObject>
