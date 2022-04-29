@@ -155,7 +155,7 @@
 				Base,
 			);
 			mainGroup = FEF239E327571BF6009065B0;
-			productRefGroup = FEF239ED27571BF6009065B0 /* Products */;
+			productRefGroup = FEF239E327571BF6009065B0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
